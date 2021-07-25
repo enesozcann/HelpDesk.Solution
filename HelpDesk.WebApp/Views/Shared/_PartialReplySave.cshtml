@@ -1,0 +1,11 @@
+﻿@using HelpDesk.Entities.HDObjects;
+@model ReplyCreateViewModel
+
+<div class="form-group">
+    <span class="text-lg font-weight-bold text-info mb-1">
+        <i class="fas fa-reply"></i>
+        Cevapla
+    </span>
+    @Html.TextAreaFor(m => m.Content, new { @class = "form-control", rows = "2" })
+    @Html.ValidationSummary()
+</div>

@@ -1,0 +1,82 @@
+﻿@using HelpDesk.Entities;
+@model List<HDTicket>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Status Info -->
+<div class="row align-items-start">
+    @BootstrapHelper.TicketStatusButtons("primary", "Yeni Destek İsteği", "#")
+    @BootstrapHelper.TicketStatusButtons("warning", "İşlem Devam Ediyor", "#")
+    @BootstrapHelper.TicketStatusButtons("danger", "Tamamlanamıyor", "#")
+    @BootstrapHelper.TicketStatusButtons("success", "Başarıyla Tamamlandı", "#")
+</div>
+
+<div class="row align-items-center">
+    @foreach (HDTicket ticket in Model)
+    {
+        HelpDesk.BusinessLayer.HDDepartmentManager hdm = new HelpDesk.BusinessLayer.HDDepartmentManager();
+        string status = null;
+        if (ticket.Status == 1)
+        {
+            status = "primary";
+        }
+        else if (ticket.Status == 2)
+        {
+            status = "warning";
+        }
+        else if (ticket.Status == 3)
+        {
+            status = "danger";
+        }
+        else { status = "success"; }
+        @BootstrapHelper.TicketCard(ticket.Id.ToString(), ticket.Title, ticket.Creator.Name + " " + ticket.Creator.Surname, hdm.GetDepartment(ticket.Creator.Department), status)
+
+    }
+</div>
+
+@BootstrapHelper.TicketDetailModal(id: "ticket-details", title: "Ticket Detay")
+
+<script src="~/js/hd-ticket.js"></script>
+
+@*<div class="modal fade" id="ticket-details" tabindex="-1" role="dialog" aria-labelledby="ticket-detailsLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ticket-detailsLabel">Destek Detayları</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Gönderen: Enes Keser</h5><hr />
+                    <h4>Sorun: Bilgisayar başlatırken takılıyor</h4><hr />
+                    <div class="text-black-50">
+                        Scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut laoreet ac, aliquam sit amet justo nunc tempor, metus vel placerat suscipit, orci nisl iaculis eros, a tincidunt nisi odio eget lorem nulla condimentum tempor mattis ut vitae feugiat augue.
+                    </div>
+                    <hr />
+                    <h6>Hata Görseli: <a href="#">Göster</a></h6>
+                    <hr />
+                    <div class="text-dark">
+                        Ipsum gravida vel pretium tellus tincidunt integer eu augue augue nunc elit dolor, luctus placerat scelerisque euismod, iaculis eu lacus nunc mi elit, vehicula ut.
+                    </div>
+
+                    <form>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Cevapla:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                    <button type="button" class="btn btn-primary">Cevap Gönder</button>
+                </div>
+            </div>
+        </div>
+    </div>*@

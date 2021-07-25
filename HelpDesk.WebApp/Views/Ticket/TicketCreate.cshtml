@@ -1,0 +1,43 @@
+﻿@using HelpDesk.Entities.HDObjects;
+@model TicketCreateViewModel
+@{
+                /**/
+
+                ViewBag.Title = "Destek Bildirimi Oluştur";
+                ViewBag.Title2 = "Önceki Taleplerim";
+                Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8">
+
+            <h2>@ViewBag.Title</h2>
+            @using (Html.BeginForm())
+            {
+                <div class="form-group">
+                    <label for="ticketTitleArea">Sorun Özet</label>
+                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control", placeholder = "Sorununuz Nedir?" })
+                </div>
+                <div class="form-group">
+                    <label for="ticketContentArea">Sorun Detayı</label>
+                    @Html.TextAreaFor(model => model.Content, new { @class = "form-control", rows = "4" })
+                    @*<textarea class="form-control" id="ticketContent" rows="4"></textarea>*@
+                </div>
+                @Html.ValidationSummary(false)
+                <div class="row">
+                    <div class="form-group col-sm-9">
+                        <label for="ticketImage">Hatayı daha iyi belirtebilmek için görsel ekleyebilirsiniz</label>
+                        <input type="file" class="form-control-file" id="ticketControlImage">
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <button href="#" type="submit" class="btn btn-primary btn-user btn-block">Gönder</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-lg-4">
+            <h2>@ViewBag.Title2</h2>
+        </div>
+    </div>
+</div>

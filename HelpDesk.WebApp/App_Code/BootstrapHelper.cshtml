@@ -1,0 +1,75 @@
+﻿@helper TicketCard(string id, string text, string author, string department, string status)
+{
+    <!-- Ticket Card -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-@status shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">@author - @department</div>
+                        <div class="h6 mb-0  text-gray-800">@text</div>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-@status btn-circle btn-lg" data-toggle="modal" data-target="#ticket-details" data-id="@id">
+                            @*<a href="#" id="@id" class="btn btn-@status btn-circle btn-lg">*@
+                            <i class="fas fa-info-circle fa-2x"></i>
+                            @*</a>*@
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@helper TicketStatusButtons(string status, string text, string link)
+{
+    <div class="col-lg-3 mb-4">
+        <div class="card bg-@status text-white text-center shadow">
+            <a href="@link" class="btn btn-@status btn-icon-split">
+                <div class="card-body">
+                    @text
+                </div>
+            </a>
+        </div>
+    </div>
+}
+
+@helper TicketDetailModal(string id = "myModal", string title = "Modal Title")
+{
+
+    <div class="modal fade" id="@id" name="@id" tabindex="-1" role="dialog" aria-labelledby="ticket-detailsLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" id="ticket-details_header">
+                    <h5 class="modal-title" id="ticket-detail_title">@title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="ticket-details_body">
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@*@helper LinkButton(string id = "", string url = "", string color = "", string addtionalClass = "", string title = "", string icon = "", string text = "")
+    {
+        <a href="@url" id="@id" name="@id" class="btn btn-@color @addtionalClass" title="@title">
+            <span class="glyphicon glyphicon-@icon"></span>@text
+        </a>
+    }*@
+
+@helper ModalButton(string id = "", string color = "", string addtionalClass = "", string title = "", string icon = "", string text = "")
+{
+    <button class="btn btn-@color @addtionalClass" data-toggle="modal" data-target="#ticket-details" data-id="@id">
+        <span class="icon text-white-50">
+            <i class="fas fa-info"></i>
+        </span>
+        <span class="text">@text</span>
+    </button>
+
+}

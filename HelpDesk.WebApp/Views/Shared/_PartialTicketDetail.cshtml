@@ -1,0 +1,103 @@
+﻿@using HelpDesk.Entities;
+@model Tuple<HDTicket, HelpDesk.Entities.HDObjects.TicketUpdateViewModel>
+@{
+    string status = null;
+    if (Model.Item1.Status == 1)
+    {
+        status = "Yeni Destek İsteği";
+    }
+    else if (Model.Item1.Status == 2)
+    {
+        status = "İşlem Devam Ediyor";
+    }
+    else if (Model.Item1.Status == 3)
+    {
+        status = "Tamamlanamıyor";
+    }
+    else { status = "Başarıyla Tamamlandı"; }
+
+    HDUser user = null;
+    if (Session["auth-user"] != null)
+    {
+        user = Session["auth-user"] as HDUser;
+    }
+
+}
+@*ticket details area*@
+<div>
+    <span class="text-lg font-weight-bold text-info mb-1">
+        <i class="fas fa-user"></i>
+        Gönderen: @Model.Item1.Creator.Name @Model.Item1.Creator.Surname<br />
+        <i class="fas fa-calendar-times"></i>
+        Tarih: @Model.Item1.CreatedOn<br />
+        <i class="fas fa-question"></i>
+        Sorun: @Model.Item1.Title<br />
+        <i class="fas fa-star-half"></i>
+        Durum: @status
+    </span>
+</div>
+<hr />
+<div class="shadow p-3 mb-5 bg-white rounded">
+    <span class="text-md text-dark">
+        <i class="fas fa-info"></i>
+        @Model.Item1.Content
+    </span>
+    <br />
+    <i class="fas fa-file-image">Hata Görseli:</i><a href="#">Göster</a>
+</div>
+<div class="form-group">
+    <span class="text-lg font-weight-bold text-info mb-1">
+        <i class="fas fa-comments"></i>
+        Son Cevaplar
+    </span>
+    @{
+        Html.RenderAction("GetReplys", "Ticket");
+    }
+</div>
+
+@if (user.IsAdmin != false)
+{
+    <hr />
+    <div class="form-group">
+        @using (Html.BeginForm())
+        {
+            @Html.DropDownListFor(m => m.Item2.Status, new SelectList(
+                                         new List<Object> {
+                                               new { value = 1, text = "Yeni Destek İsteği" },
+                                               new { value = 2, text = "İşlem Devam Ediyor" },
+                                               new { value = 3, text = "Tamamlanamıyor" },
+                                               new { value = 4, text = "Başarıyla Tamamlandı"}
+                                            },
+                                         "value",
+                                         "text",
+                                          new { @class = "form-control" }
+                                         )
+                  )
+            <button type="button" class="btn btn-outline-secondary" onclick="doTicketUpdate(this,@Model.Item1.Id,'#Item1_Status');">Güncelle</button>
+            @Html.ValidationSummary(false)
+        }
+    </div>
+}
+@if (Model.Item1.Status == 1 || Model.Item1.Status == 2)
+{
+
+    using (Html.BeginForm())
+    {
+        Html.RenderAction("CreateReply", "Ticket");
+        @*<div class="form-group">
+            <span class="text-lg font-weight-bold text-info mb-1">
+                <i class="fas fa-reply"></i>
+                Cevapla
+            </span>
+            @Html.TextAreaFor(m => m.Item2.Content, new { @class = "form-control", rows = "2" })
+        </div>*@       
+    }
+
+}
+        <div class="modal-footer" id="ticket-details_footer">
+            @if (Model.Item1.Status == 1 || Model.Item1.Status == 2)
+            {
+                <button type="submit" class="btn btn-primary" onclick="doReplySave(this,@Model.Item1.Id);">Cevap Gönder</button>
+            }
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+        </div>

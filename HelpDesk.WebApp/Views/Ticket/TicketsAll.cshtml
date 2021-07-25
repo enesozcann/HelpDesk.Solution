@@ -1,0 +1,75 @@
+﻿@using HelpDesk.Entities;
+@model List<HDTicket>
+@{
+    ViewBag.Title = "TicketsAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+    <!-- AllTickets Datatable -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Tüm Destek Talepleri</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Departman</th>
+                            <th>Ticket</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>Durum</th>
+                            <th>Seçenekler</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Departman</th>
+                            <th>Ticket</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>Durum</th>
+                            <th>Seçenekler</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (HDTicket ticket in Model)
+                        {
+                            HelpDesk.BusinessLayer.HDDepartmentManager hdm = new HelpDesk.BusinessLayer.HDDepartmentManager();
+                            string status = null;
+                            if (ticket.Status == 1)
+                            {
+                                status = "Yeni Destek İsteği";
+                            }
+                            else if (ticket.Status == 2)
+                            {
+                                status = "İşlem Devam Ediyor";
+                            }
+                            else if (ticket.Status == 3)
+                            {
+                                status = "Tamamlanamıyor";
+                            }
+                            else { status = "Başarıyla Tamamlandı"; }
+                            <tr>
+                                <td>@ticket.Creator.Name @ticket.Creator.Surname</td>
+                                <td>@hdm.GetDepartment(ticket.Creator.Department)</td>
+                                <td>@ticket.Title</td>
+                                <td>@ticket.ModifiedOn</td>
+                                <td>@status</td>
+                                <td>
+                                    @BootstrapHelper.ModalButton(ticket.Id.ToString(), "warning", "btn-icon-split", string.Empty, "info-circle", " Detaylar")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.container-fluid -->
+@BootstrapHelper.TicketDetailModal(id: "ticket-details", title: "Ticket Detay")
+<script src="~/js/hd-ticket.js"></script>

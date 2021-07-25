@@ -1,0 +1,41 @@
+﻿@using HelpDesk.Entities;
+@model List<HDTicket>
+@{
+    ViewBag.Title = "GetTicketMyList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Status Info -->
+@*<div class="row align-items-start">
+    @BootstrapHelper.TicketStatusButtons("primary", "Yeni Destek İsteği", "#")
+    @BootstrapHelper.TicketStatusButtons("warning", "İşlem Devam Ediyor", "#")
+    @BootstrapHelper.TicketStatusButtons("danger", "Tamamlanamıyor", "#")
+    @BootstrapHelper.TicketStatusButtons("success", "Başarıyla Tamamlandı", "#")
+</div>*@
+
+<div class="row align-items-center">
+    @foreach (HDTicket ticket in Model)
+    {
+        HelpDesk.BusinessLayer.HDDepartmentManager hdm = new HelpDesk.BusinessLayer.HDDepartmentManager();
+        string status = null;
+        if (ticket.Status == 1)
+        {
+            status = "primary";
+        }
+        else if (ticket.Status == 2)
+        {
+            status = "warning";
+        }
+        else if (ticket.Status == 3)
+        {
+            status = "danger";
+        }
+        else { status = "success"; }
+        @BootstrapHelper.TicketCard(ticket.Id.ToString(), ticket.Title, ticket.Creator.Name + " " + ticket.Creator.Surname, hdm.GetDepartment(ticket.Creator.Department), status)
+
+    }
+</div>
+
+@BootstrapHelper.TicketDetailModal(id: "ticket-details", title: "Ticket Detay")
+
+<script src="~/js/hd-ticket.js"></script>

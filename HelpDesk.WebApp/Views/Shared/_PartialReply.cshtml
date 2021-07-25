@@ -1,0 +1,56 @@
+﻿@using HelpDesk.Entities;
+@model List<HDReply>
+
+@{
+    HDUser user = null;
+    if (Session["auth-user"] != null)
+    {
+        user = Session["auth-user"] as HDUser;
+    }
+}
+
+@if (Model.Count != 0)
+{
+    foreach (HDReply reply in Model)
+    {
+        if (user.Id == reply.Creator.Id)
+        {
+            <div class="shadow p-3 mb-5 bg-white rounded">
+                <p class="text-md text-dark">
+                    @reply.Content<br />
+
+                    <i class="fas fa-user"></i>
+                    Sen<br />
+                    <i class="fas fa-calendar-times"></i>
+                    @reply.ModifiedOn
+                </p>
+            </div>
+
+        }
+        else
+        {
+            <div class="shadow p-3 mb-5 bg-white rounded">
+                   @reply.Content<br />
+                <span class="text-md text-dark">
+                    <i class="fas fa-user"></i>
+                    @reply.Creator.Name  @reply.Creator.Surname<br />
+                    <i class="fas fa-calendar-times"></i>
+                    @reply.ModifiedOn
+                </span>
+            </div>
+
+            @*@reply.Content<br />
+                <i class="fas fa-user text-left">Cevaplayan:</i><br />
+                <i class="fas fa-calendar-times text-left">Tarih:@reply.ModifiedOn</i>
+                <br />*@
+        }
+
+    }
+}
+else
+{
+    <div class="shadow p-3 mb-5 bg-white rounded">
+        <span>Henüz kimse cevaplamamış</span>
+
+    </div>
+}
